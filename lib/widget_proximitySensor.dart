@@ -102,8 +102,9 @@ class ProximitySensorSelectorWidgetState extends State<ProximitySensorSelectorWi
   {
     return FloatingActionButton.extended(
         onPressed: onPressed,
-        icon: const Icon(Icons.edgesensor_high),
-        label: Text(message));
+        icon: Icon(useProximitySensor? Icons.edgesensor_high : Icons.smartphone),
+        label: Text(message),
+        backgroundColor: useProximitySensor? Colors.green : Colors.blue);
   }
 
 }

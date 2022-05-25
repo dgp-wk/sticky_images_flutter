@@ -6,6 +6,8 @@ class ScalingWidgetState extends State<ScalingWidget>
 {
   BoxFit fittingMode = BoxFit.cover;
   String message = "Image Fit\nCover";
+  IconData icon = Icons.fullscreen;
+  Color color = Colors.blue;
 
   void onPressed() async
   {
@@ -16,10 +18,14 @@ class ScalingWidgetState extends State<ScalingWidget>
         case BoxFit.fill:
           fittingMode = BoxFit.cover;
           message = "Image Fit\nCover";
+          icon = Icons.fit_screen;
+          color = Colors.blue;
           break;
         case BoxFit.cover:
           fittingMode = BoxFit.fill;
           message = "Image Fit\nStretch";
+          icon = Icons.aspect_ratio;
+          color = Colors.red;
           break;
         // We only want two fill modes. In the event of a cosmic mishap, sanitize everything else to cover.
         case BoxFit.contain:
@@ -29,6 +35,8 @@ class ScalingWidgetState extends State<ScalingWidget>
         case BoxFit.scaleDown:
           fittingMode = BoxFit.cover;
           message = "Image Fit\nCover";
+          icon = Icons.fit_screen;
+          color = Colors.blue;
           break;
       }
     });
@@ -42,8 +50,9 @@ class ScalingWidgetState extends State<ScalingWidget>
 
     return FloatingActionButton.extended(
         onPressed: onPressed,
-        icon: const Icon(Icons.fit_screen),
-        label: Text(message));
+        icon: Icon(icon),
+        label: Text(message),
+        backgroundColor: color);
   }
 
 }

@@ -47,7 +47,7 @@ class SelectionWidget extends StatelessWidget
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                          padding: const EdgeInsets.only(top: 50.0),
+                          padding: const EdgeInsets.only(top: 0.0),
                           child: SizedBox(
                               height: 150,
                               width: 150,
