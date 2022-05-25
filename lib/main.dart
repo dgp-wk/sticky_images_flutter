@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sticky_images_flutter/widget_proximitySensor.dart';
 import 'mode_select.dart';
 import 'mode_stickyImage.dart';
 import 'mode_stickyVideo.dart';
@@ -36,8 +37,13 @@ class MyApp extends StatefulWidget {
 class MyState extends State<MyApp>
 {
   XFile? stickyFile;
+  BoxFit fittingMode = BoxFit.cover;
+  bool useProximitySensor = false;
   bool isVideo = false;
 
+  //setFile is the only setter that needs to set state.
+  // On we assign an image to make sticky, we can then transition to the stick image mode.
+  // So, fire a widget rebuild when we set a file.
   void setFile(XFile file, isVideo) async
   {
     developer.log(file.path);
@@ -47,21 +53,39 @@ class MyState extends State<MyApp>
     });
   }
 
+  void setScaling(BoxFit fittingMode) async
+  {
+    developer.log("SetScaling $fittingMode");
+    this.fittingMode = fittingMode;
+  }
+
+  void setProximitySensor(bool useProximitySensor) async
+  {
+    this.useProximitySensor = useProximitySensor;
+  }
+
   @override
   Widget build(BuildContext context)
   {
     if (stickyFile == null)
     {
       return SelectionWidget(
-          onPickerCallback: setFile
+          onPickerCallback: setFile,
+          scalingCallback: setScaling,
+          useProximitySensorCallback: setProximitySensor
       ).build(context);
     }
 
     if (isVideo)
     {
-      return StickyVideoWidget(stickyFile!.path);
+      return StickyVideoWidget(stickyFile!.path, fittingMode,
+          proximityListenerWidget: useProximitySensor? const ProximityListenerWidget() : null);
     }
-    return StickyImageWidget(stickyFile!.path);
+    else
+    {
+      return StickyImageWidget(stickyFile!.path, fittingMode,
+          proximityListenerWidget: useProximitySensor? const ProximityListenerWidget() : null);
+    }
   }
 
   @override

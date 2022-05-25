@@ -3,10 +3,21 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import 'widget_proximitySensor.dart';
+
 class StickyVideoWidget extends StatefulWidget
 {
   final String videoURI;
-  const StickyVideoWidget(this.videoURI,{super.key});
+  final BoxFit fittingMode;
+  final ProximityListenerWidget? proximityListenerWidget;
+
+  const StickyVideoWidget(
+      this.videoURI,
+      this.fittingMode,
+      {
+        this.proximityListenerWidget,
+        super.key
+      });
 
   @override
   StickyVideoWidgetState createState()
@@ -45,18 +56,31 @@ class StickyVideoWidgetState extends State<StickyVideoWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
+  Widget build(BuildContext context)
+  {
+    List<Widget> widgets = <Widget>[];
+    if (widget.proximityListenerWidget != null)
+    {
+      widgets.add(widget.proximityListenerWidget!);
+    }
+
+    widgets.add(FutureBuilder(
       future: _initializeVideoPlayerFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           // If the VideoPlayerController has finished initialization, use
           // the data it provides to limit the aspect ratio of the video.
-          return AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            // Use the VideoPlayer widget to display the video.
-            child: VideoPlayer(_controller),
-          );
+          return SizedBox.expand(
+            child: FittedBox(
+                fit:widget.fittingMode,
+                clipBehavior: Clip.hardEdge,
+                child:SizedBox(
+                    width:_controller.value.size.width,
+                    height:_controller.value.size.height,
+                    child: VideoPlayer(_controller)
+              )),
+          )
+          ;
         } else {
           // If the VideoPlayerController is still initializing, show a
           // loading spinner.
@@ -65,6 +89,16 @@ class StickyVideoWidgetState extends State<StickyVideoWidget> {
           );
         }
       },
-    );
+    ));
+
+    return MaterialApp(
+        home:WillPopScope(
+          onWillPop: () async
+            {
+              return false;
+            },
+          child:Stack(
+            children: widgets,
+        )));
   }
 }

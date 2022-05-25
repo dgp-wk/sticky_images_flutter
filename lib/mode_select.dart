@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'widget_proximitySensor.dart';
+import 'widget_scalingMode.dart';
+
 typedef OnPickerCallback = void Function(XFile, bool);
 
 class SelectionWidget extends StatelessWidget
 {
   const SelectionWidget({
     Key? key,
-    required this.onPickerCallback}) : super(key: key);
+    required this.onPickerCallback,
+    required this.scalingCallback,
+    required this.useProximitySensorCallback,
+  }) : super(key: key);
 
   final OnPickerCallback? onPickerCallback;
+  final OnScalingCallback scalingCallback;
+  final OnUseProximitySensorCallback useProximitySensorCallback;
 
   Future<void> getImage() async
   {
@@ -55,8 +63,17 @@ class SelectionWidget extends StatelessWidget
                               child: FittedBox(
                                   child: FloatingActionButton(
                                       onPressed: getVideo,
-                                      child: const Icon(Icons.video_file)))))
+                                      child: const Icon(Icons.video_file))))),
+                      Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: ScalingWidget(scalingCallback: scalingCallback)
+                          ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 50.0),
+                        child: ProximitySensorSelectorWidget(useProximitySensorCallback: useProximitySensorCallback)
+                      )
                     ]
                 ))));
   }
 }
+
