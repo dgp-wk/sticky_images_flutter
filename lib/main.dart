@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kiosk_mode/kiosk_mode.dart';
 import 'package:sticky_images_flutter/widget_proximitySensor.dart';
 import 'mode_select.dart';
 import 'mode_stickyImage.dart';
@@ -40,6 +41,7 @@ class MyState extends State<MyApp>
   BoxFit fittingMode = BoxFit.cover;
   bool useProximitySensor = false;
   bool isVideo = false;
+  bool useKioskMode = false;
 
   //setFile is the only setter that needs to set state.
   // On we assign an image to make sticky, we can then transition to the stick image mode.
@@ -64,6 +66,16 @@ class MyState extends State<MyApp>
     this.useProximitySensor = useProximitySensor;
   }
 
+  void setKioskMode(bool useKioskMode) async
+  {
+    this.useKioskMode = useKioskMode;
+  }
+
+  void triggerKioskMode() async
+  {
+    await startKioskMode();
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -72,8 +84,14 @@ class MyState extends State<MyApp>
       return SelectionWidget(
           onPickerCallback: setFile,
           scalingCallback: setScaling,
-          useProximitySensorCallback: setProximitySensor
+          useProximitySensorCallback: setProximitySensor,
+          useKioskModeCallback: setKioskMode,
       ).build(context);
+    }
+
+    if (useKioskMode)
+    {
+      triggerKioskMode();
     }
 
     if (isVideo)

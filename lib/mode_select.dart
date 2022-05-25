@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:sticky_images_flutter/widget_kiosk.dart';
 
 import 'widget_proximitySensor.dart';
 import 'widget_scalingMode.dart';
@@ -13,11 +14,13 @@ class SelectionWidget extends StatelessWidget
     required this.onPickerCallback,
     required this.scalingCallback,
     required this.useProximitySensorCallback,
+    required this.useKioskModeCallback,
   }) : super(key: key);
 
   final OnPickerCallback? onPickerCallback;
   final OnScalingCallback scalingCallback;
   final OnUseProximitySensorCallback useProximitySensorCallback;
+  final OnUseKioskModeCallback useKioskModeCallback;
 
   Future<void> getImage() async
   {
@@ -69,8 +72,12 @@ class SelectionWidget extends StatelessWidget
                           child: ScalingWidget(scalingCallback: scalingCallback)
                           ),
                       Padding(
-                        padding: const EdgeInsets.only(top: 50.0),
-                        child: ProximitySensorSelectorWidget(useProximitySensorCallback: useProximitySensorCallback)
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: ProximitySensorSelectorWidget(useProximitySensorCallback: useProximitySensorCallback)
+                          ),
+                      Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: KioskSelectorWidget(useKioskModeCallback: useKioskModeCallback)
                       )
                     ]
                 ))));
