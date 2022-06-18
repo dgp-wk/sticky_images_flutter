@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kiosk_mode/kiosk_mode.dart';
 import 'package:sticky_images_flutter/widget_proximitySensor.dart';
+import 'package:wakelock/wakelock.dart';
 import 'mode_select.dart';
 import 'mode_stickyImage.dart';
 import 'mode_stickyVideo.dart';
@@ -42,6 +43,7 @@ class MyState extends State<MyApp>
   bool useProximitySensor = false;
   bool isVideo = false;
   bool useKioskMode = false;
+  bool useWakelock = true;
 
   //setFile is the only setter that needs to set state.
   // On we assign an image to make sticky, we can then transition to the stick image mode.
@@ -70,10 +72,20 @@ class MyState extends State<MyApp>
   {
     this.useKioskMode = useKioskMode;
   }
+  
+  void setWakelockMode(bool useWakelock) async
+  {
+    this.useWakelock = useWakelock;
+  }
 
   void triggerKioskMode() async
   {
     await startKioskMode();
+  }
+
+  void triggerWakelock() async
+  {
+    Wakelock.toggle(enable: useWakelock);
   }
 
   @override
@@ -86,12 +98,18 @@ class MyState extends State<MyApp>
           scalingCallback: setScaling,
           useProximitySensorCallback: setProximitySensor,
           useKioskModeCallback: setKioskMode,
+          useWakelockModeCallback: setWakelockMode,
       ).build(context);
     }
 
     if (useKioskMode)
     {
       triggerKioskMode();
+    }
+
+    if (useWakelock)
+    {
+      triggerWakelock();
     }
 
     if (isVideo)
