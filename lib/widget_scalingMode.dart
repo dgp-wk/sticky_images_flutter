@@ -6,7 +6,7 @@ class ScalingWidgetState extends State<ScalingWidget>
 {
   BoxFit fittingMode = BoxFit.cover;
   String message = "Image Fit\nCover";
-  IconData icon = Icons.fullscreen;
+  IconData icon = Icons.aspect_ratio;
   Color color = Colors.blue;
 
   void onPressed() async

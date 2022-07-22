@@ -24,8 +24,13 @@ void init() async
 
 void tick(Duration now)
 {
-
+  if(useAggressiveFullscreen)
+  {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+  }
 }
+
+bool useAggressiveFullscreen = false;
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -78,6 +83,11 @@ class MyState extends State<MyApp>
     this.useWakelock = useWakelock;
   }
 
+  void setAggressiveFullscreen(bool value) async
+  {
+    useAggressiveFullscreen = value;
+  }
+
   void triggerKioskMode() async
   {
     await startKioskMode();
@@ -99,6 +109,7 @@ class MyState extends State<MyApp>
           useProximitySensorCallback: setProximitySensor,
           useKioskModeCallback: setKioskMode,
           useWakelockModeCallback: setWakelockMode,
+          useAggressiveFullscreenCallback: setAggressiveFullscreen,
       ).build(context);
     }
 

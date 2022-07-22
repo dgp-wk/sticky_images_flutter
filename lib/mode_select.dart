@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sticky_images_flutter/widget_kiosk.dart';
 
+import 'widget_aggressiveFullscreen.dart';
 import 'widget_proximitySensor.dart';
 import 'widget_scalingMode.dart';
 import 'widget_wakelock.dart';
@@ -17,6 +18,7 @@ class SelectionWidget extends StatelessWidget
     required this.useProximitySensorCallback,
     required this.useKioskModeCallback,
     required this.useWakelockModeCallback,
+    required this.useAggressiveFullscreenCallback,
   }) : super(key: key);
 
   final OnPickerCallback? onPickerCallback;
@@ -24,6 +26,7 @@ class SelectionWidget extends StatelessWidget
   final OnUseProximitySensorCallback useProximitySensorCallback;
   final OnUseKioskModeCallback useKioskModeCallback;
   final OnUseWakelockModeCallback useWakelockModeCallback;
+  final OnUseAggressiveFullscreenCallback useAggressiveFullscreenCallback;
 
   Future<void> getImage() async
   {
@@ -88,6 +91,10 @@ class SelectionWidget extends StatelessWidget
                     Flexible(
                         flex: 1,
                         child: ProximitySensorSelectorWidget(useProximitySensorCallback: useProximitySensorCallback)
+                    ),
+                    Flexible(
+                        flex: 1,
+                        child: AggressiveFullscreenSelectorWidget(useAggressiveFullscreenCallback: useAggressiveFullscreenCallback)
                     ),
                     const Spacer()
                   ]
